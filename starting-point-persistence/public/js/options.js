@@ -9,7 +9,7 @@
  * then tells the trip module to add the attraction.
  */
 
-$(function(){
+var options = function(){
 
   // jQuery selects
   var $optionsPanel = $('#options-panel');
@@ -17,13 +17,13 @@ $(function(){
   var $restaurantSelect = $optionsPanel.find('#restaurant-choices');
   var $activitySelect = $optionsPanel.find('#activity-choices');
 
-	
+
   // application state
 	var hotelsObj = $.ajax({
 					method: 'GET',
 					url: '/api/hotels'
 	})
-	
+
 	var activitiesObj = $.ajax({
 					method: 'GET',
 					url: '/api/activities'
@@ -33,14 +33,19 @@ $(function(){
 					method: 'GET',
 					url: '/api/restaurants'
 	})
-  Promise.all([hotelsObj, activitiesObj, restaurantsObj])
+  /*Promise.all([hotelsObj, activitiesObj, restaurantsObj])
   				.then(([hotels, activities, restaurants]) => {
 
   // make all the option tags (second arg of `forEach` is a `this` binding)
 					hotels.forEach(makeOption, $hotelSelect);
 					restaurants.forEach(makeOption, $restaurantSelect);
 					activities.forEach(makeOption, $activitySelect);
-				})
+				})*/
+  allPromises.then(() => {
+    enhanced.hotels.forEach(makeOption, $hotelSelect);
+    enhanced.restaurants.forEach(makeOption, $restaurantSelect);
+    enhanced.activities.forEach(makeOption, $activitySelect);
+  });
 
   function makeOption (databaseAttraction) {
     var $option = $('<option></option>') // makes a new option tag

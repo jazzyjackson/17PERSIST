@@ -8,14 +8,14 @@ var enhanced = {};
  * to add an attraction in the `options` module.
  */
 
-var attractionsModule = (function () {
+var attractionsModule = function () {
 
   // application state
 	var hotelsObj = $.ajax({
 					method: 'GET',
 					url: '/api/hotels'
 	})
-	
+
 	var activitiesObj = $.ajax({
 					method: 'GET',
 					url: '/api/activities'
@@ -64,4 +64,4 @@ var attractionsModule = (function () {
 
   return publicAPI;
 
-}());
+};
