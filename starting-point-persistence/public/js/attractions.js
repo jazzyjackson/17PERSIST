@@ -11,13 +11,14 @@
  var attractionsModule = (function() {
 
    // application state
+   //
+   var enhanced = {};
 
    var promiseTwo = ajaxPromise
      .then(([hotels, activities, restaurants]) => {
        enhanced.hotels = hotels;
        enhanced.restaurants = restaurants;
        enhanced.activities = activities;
-       console.log(enhanced);
      });
 
    // private helper methods (only available inside the module)
@@ -33,20 +34,25 @@
    var publicAPI = {
 
      getByTypeAndId: function(type, id) {
-       promiseTwo.then(() => {
-         if (type === 'hotel') return findById(enhanced.hotels, id);
-         else if (type === 'restaurant') return findById(enhanced.restaurants, id);
-         else if (type === 'activity') return findById(enhanced.activities, id);
-         else throw Error('Unknown attraction type');
+       return promiseTwo.then(() => {
+         let newProm = new Promise((resolve, reject) => {
+           if (type === 'hotel') resolve(findById(enhanced.hotels, id));
+           else if (type === 'restaurant') resolve(findById(enhanced.restaurants, id));
+           else if (type === 'activity') resolve(findById(enhanced.activities, id));
+           else throw Error('Unknown attraction type');
+         });
+         return newProm;
        });
      },
 
      getEnhanced: function(databaseAttraction) {
-       var type = databaseAttraction.type;
-       var id = databaseAttraction.id;
-       var found = publicAPI.getByTypeAndId(type, id);
-       if (found) return found;
-       throw Error('enhanced version not found', databaseAttraction);
+       promiseTwo.then(() => {
+         var type = databaseAttraction.type;
+         var id = databaseAttraction.id;
+         var found = publicAPI.getByTypeAndId(type, id);
+         if (found) return found;
+         throw Error('enhanced version not found', databaseAttraction);
+       });
      }
 
    };

@@ -94,21 +94,22 @@ var dayModule = (function () {
 
   Day.prototype.addAttraction = function (attraction) {
     // adding to the day object
-    switch (attraction.type) {
+    var newAttrObj = attractionModule.create(attraction);
+    switch (newAttrObj.type) {
       case 'hotel':
         if (this.hotel) this.hotel.hide();
-        this.hotel = attraction;
+        this.hotel = newAttrObj;
         break;
       case 'restaurant':
-        utilsModule.pushUnique(this.restaurants, attraction);
+        utilsModule.pushUnique(this.restaurants, newAttrObj);
         break;
       case 'activity':
-        utilsModule.pushUnique(this.activities, attraction);
+        utilsModule.pushUnique(this.activities, newAttrObj);
         break;
-      default: console.error('bad type:', attraction);
+      default: console.error('bad type:', newAttrObj);
     }
     // activating UI
-    attraction.show();
+    newAttrObj.show();
   };
 
   Day.prototype.removeAttraction = function (attraction) {

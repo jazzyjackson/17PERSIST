@@ -81,6 +81,7 @@ var tripModule = (function () {
     switchTo: switchTo,
 
     addToCurrent: function (attraction) {
+      console.log('attraction in trip.js addToCurrent: ', attraction);
       currentDay.addAttraction(attraction);
     },
 

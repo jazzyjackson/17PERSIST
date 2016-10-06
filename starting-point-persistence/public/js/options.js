@@ -17,23 +17,7 @@ $(function(){
   var $restaurantSelect = $optionsPanel.find('#restaurant-choices');
   var $activitySelect = $optionsPanel.find('#activity-choices');
 
-	
-  // application state
-	var hotelsObj = $.ajax({
-					method: 'GET',
-					url: '/api/hotels'
-	})
-	
-	var activitiesObj = $.ajax({
-					method: 'GET',
-					url: '/api/activities'
-
-	})
-	var restaurantsObj = $.ajax({
-					method: 'GET',
-					url: '/api/restaurants'
-	})
-  Promise.all([hotelsObj, activitiesObj, restaurantsObj])
+  ajaxPromise
   				.then(([hotels, activities, restaurants]) => {
 
   // make all the option tags (second arg of `forEach` is a `this` binding)
@@ -56,7 +40,10 @@ $(function(){
     var id = $select.find(':selected').val();
     // get associated attraction and add it to the current day in the trip
     var attraction = attractionsModule.getByTypeAndId(type, id);
-    tripModule.addToCurrent(attraction);
+    // tripModule.addToCurrent(attraction);
+    attraction.then((attr) => {
+      tripModule.addToCurrent(attr);
+    })
   });
 
 });
